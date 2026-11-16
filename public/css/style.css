@@ -1,0 +1,86 @@
+ body {
+     font-family: "Plus Jakarta Sans", sans-serif !important;
+     display: flex;
+     flex-direction: column;
+     min-height: 100vh;
+ }
+ 
+ .container {
+     flex: 1
+ }
+ /* Navbar */
+ 
+ .custom-navbar {
+     background-color: #263D35 ! important;
+ }
+ 
+ .custom-navbar .navbar-brand,
+ .custom-navbar .nav-link {
+     color: white !important;
+ }
+ 
+ .navbar {
+     height: 5rem
+ }
+ 
+ .fa-compass {
+     color: #fe424d;
+     font-size: 2rem;
+ }
+ /* Footer */
+ /* Footer */
+ 
+ .f-info-socials a {
+     color: inherit;
+     margin: 0 0.6rem;
+     transition: color 0.2s;
+ }
+ 
+ .f-info-socials i {
+     font-size: 1.6rem;
+ }
+ 
+ .f-info-socials a:hover {
+     color: #fe424d;
+     /* same red as your compass */
+ }
+ 
+ .f-info-links a {
+     color: inherit;
+     text-decoration: none;
+     margin: 0 0.75rem;
+ }
+ 
+ .f-info-links a:hover {
+     text-decoration: underline;
+ }
+ /* Cards */
+ 
+ .card {
+     border: none !important;
+     margin-bottom: 2rem;
+ }
+ 
+ .card-img-top {
+     border-radius: 1rem !important;
+     width: 100% !important;
+     object-fit: cover !important;
+ }
+ 
+ .card-body {
+     padding: 0 !important;
+ }
+ 
+ .card-text {
+     font-weight: 500 !important;
+ }
+ /* Card Effect */
+ 
+ .card-img-overlay {
+     opacity: 0
+ }
+ 
+ .card-img-overlay:hover {
+     opacity: 0.2;
+     background-color: white;
+ }
