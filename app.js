@@ -7,7 +7,9 @@ const methodOverride = require("method-override")
 const ejsMate = require("ejs-mate")
 const wrapAsync = require("./utils/wrapAsync.js")
 const ExpressError = require("./utils/ExpressError.js")
-const { listingSchema } = require("./schema.js")
+const { listingSchema } = require("./schemaValidation.js")
+const Review = require("./Models/review.js")
+const { reviewSchema } = require("./schemaValidation.js")
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -40,6 +42,15 @@ const validateListing = (req, res, next) => {
     next();
 };
 
+const validateReview = (req, res, next) => {
+    const { error } = reviewSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map((el) => el.message).join(", ");
+        throw new ExpressError(400, msg);
+    }
+    next();
+};
+
 // Get Listings
 app.get("/listings", wrapAsync(async(req, res) => {
     const allListings = await Listing.find({});
@@ -54,7 +65,7 @@ app.get("/listings/new", (req, res) => {
 // Show Route
 app.get("/listings/:id", wrapAsync(async(req, res) => {
     const { id } = req.params;
-    const listing = await Listing.findById(id);
+    const listing = await Listing.findById(id).populate("reviews")
     res.render("listings/show.ejs", { listing });
 }));
 
@@ -85,6 +96,27 @@ app.delete("/listings/:id", wrapAsync(async(req, res) => {
     const deletedListing = await Listing.findByIdAndDelete(id);
     console.log(deletedListing);
     res.redirect("/listings");
+}));
+
+// Reviews
+// Post Route
+app.post("/listings/:id/reviews", validateReview, wrapAsync(async(req, res) => {
+    const listing = await Listing.findById(req.params.id);
+    const newReview = new Review(req.body.review);
+    listing.reviews.push(newReview);
+    await newReview.save();
+    await listing.save();
+    res.redirect(`/listings/${listing._id}`);
+}));
+
+// Delete Route 
+app.delete("/listings/:id/reviews/:reviewId", wrapAsync(async(req, res) => {
+    const { id, reviewId } = req.params;
+
+    await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
+    await Review.findByIdAndDelete(reviewId);
+
+    res.redirect(`/listings/${id}`);
 }));
 
 // 404 handler
