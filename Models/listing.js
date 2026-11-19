@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const review = require("./review")
+const Review = require("./review.js");
+
+const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=60";
 
 const listingSchema = new Schema({
     title: {
@@ -10,10 +12,8 @@ const listingSchema = new Schema({
     description: String,
     image: {
         type: String,
-        default: "https://unsplash.com/photos/a-beach-with-palm-trees-and-a-sunset-2YjUoTdqD1s",
-        set: (v) =>
-            v === " " ?
-            "https://unsplash.com/photos/a-beach-with-palm-trees-and-a-sunset-2YjUoTdqD1s" : v,
+        default: DEFAULT_IMAGE,
+        set: (v) => (!v || v.trim() === "" ? DEFAULT_IMAGE : v),
     },
     price: Number,
     location: String,
@@ -21,15 +21,13 @@ const listingSchema = new Schema({
     reviews: [{
         type: Schema.Types.ObjectId,
         ref: "Review",
-    }, ]
+    }, ],
 });
 
 listingSchema.post("findOneAndDelete", async(listing) => {
     if (listing) {
-        await Review.deleteMany({ _id: { $in: listing.reviews } })
+        await Review.deleteMany({ _id: { $in: listing.reviews } });
     }
-})
+});
 
-const Listing = mongoose.model("Listing", listingSchema);
-
-module.exports = Listing;
+module.exports = mongoose.model("Listing", listingSchema);
