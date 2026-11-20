@@ -5,10 +5,7 @@ const Review = require("./review.js");
 const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=60";
 
 const listingSchema = new Schema({
-    title: {
-        type: String,
-        required: true,
-    },
+    title: { type: String, required: true },
     description: String,
     image: {
         type: String,
@@ -18,14 +15,12 @@ const listingSchema = new Schema({
     price: Number,
     location: String,
     country: String,
-    reviews: [{
-        type: Schema.Types.ObjectId,
-        ref: "Review",
-    }, ],
+    reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }],
+    owner: { type: Schema.Types.ObjectId, ref: "User" },
 });
 
 listingSchema.post("findOneAndDelete", async(listing) => {
-    if (listing) {
+    if (listing && listing.reviews.length) {
         await Review.deleteMany({ _id: { $in: listing.reviews } });
     }
 });

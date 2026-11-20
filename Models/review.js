@@ -5,6 +5,7 @@ const reviewSchema = new Schema({
     comment: {
         type: String,
         required: true,
+        trim: true,
     },
     rating: {
         type: Number,
@@ -14,7 +15,11 @@ const reviewSchema = new Schema({
     },
     createdAt: {
         type: Date,
-        default: Date.now(),
+        default: Date.now,
+    },
+    author: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
     },
 });
 
