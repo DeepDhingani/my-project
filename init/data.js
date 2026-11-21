@@ -1,5 +1,5 @@
 // Sample data. "image" is a plain URL here; init/index.js converts it to { url, filename }.
-// "owner" is added by init/index.js.
+// "owner" and "geometry" are added by init/index.js.
 const sampleListings = [{
         title: "Cozy Beachfront Cottage",
         description: "Escape to this charming beachfront cottage for a relaxing getaway. Enjoy stunning ocean views and easy beach access.",
@@ -7,6 +7,7 @@ const sampleListings = [{
         price: 1500,
         location: "Malibu",
         country: "United States",
+        category: "trending",
     },
     {
         title: "Modern Loft in Downtown",
@@ -15,6 +16,7 @@ const sampleListings = [{
         price: 1200,
         location: "New York City",
         country: "United States",
+        category: "iconic-cities",
     },
     {
         title: "Mountain Retreat",
@@ -23,6 +25,7 @@ const sampleListings = [{
         price: 1000,
         location: "Aspen",
         country: "United States",
+        category: "mountains",
     },
     {
         title: "Historic Villa in Tuscany",
@@ -31,6 +34,7 @@ const sampleListings = [{
         price: 2500,
         location: "Florence",
         country: "Italy",
+        category: "castles",
     },
     {
         title: "Heritage Haveli Stay",
@@ -39,6 +43,7 @@ const sampleListings = [{
         price: 3500,
         location: "Rajkot",
         country: "India",
+        category: "rooms",
     },
     {
         title: "Lakeside Cabin",
@@ -47,6 +52,7 @@ const sampleListings = [{
         price: 1800,
         location: "Banff",
         country: "Canada",
+        category: "camping",
     },
 ];
 

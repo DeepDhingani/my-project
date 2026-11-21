@@ -1,5 +1,6 @@
 const Listing = require("../Models/listing.js");
 const { cloudinary } = require("../cloudConfig.js");
+const geocode = require("../utils/geoCode.js");
 
 const CATEGORIES = [
     "trending", "rooms", "iconic-cities", "mountains", "castles",
@@ -15,12 +16,33 @@ const removeCloudImage = async(filename) => {
     }
 };
 
-module.exports.index = async(req, res) => {
-    const { category } = req.query;
-    const isValid = CATEGORIES.includes(category);
-    const allListings = await Listing.find(isValid ? { category } : {});
+const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-    if (category && allListings.length === 0) {
+// A failed geocode (no token, Mapbox down, unknown place) must never block saving a listing
+const safeGeocode = async(location, country) => {
+    try {
+        return await geocode(location, country);
+    } catch (err) {
+        console.log("Geocoding skipped:", err.message);
+        return null;
+    }
+};
+
+module.exports.index = async(req, res) => {
+    const { category, search } = req.query;
+    const isValid = CATEGORIES.includes(category);
+    const searchQuery = typeof search === "string" ? search.trim().slice(0, 60) : "";
+
+    const filter = {};
+    if (isValid) filter.category = category;
+    if (searchQuery) {
+        const rx = new RegExp(escapeRegex(searchQuery), "i");
+        filter.$or = [{ title: rx }, { location: rx }, { country: rx }];
+    }
+
+    const allListings = await Listing.find(filter);
+
+    if (isValid && !searchQuery && allListings.length === 0) {
         req.flash("error", "No listings found in this category yet.");
         return res.redirect("/listings");
     }
@@ -28,6 +50,7 @@ module.exports.index = async(req, res) => {
     res.render("listings/index.ejs", {
         allListings,
         activeCategory: isValid ? category : "",
+        searchQuery,
     });
 };
 
@@ -47,19 +70,32 @@ module.exports.showListing = async(req, res) => {
 
     res.render("listings/show.ejs", {
         listing,
-        mapToken: process.env.MAP_TOKEN, // use the exact name from your .env
+        mapToken: process.env.MAP_TOKEN,
     });
 };
 
 module.exports.createListing = async(req, res) => {
-    const newListing = new Listing(req.body.listing);
+    const data = {...req.body.listing };
+    delete data.image; // the image comes from the upload, never from a text field
+    if (!data.category) delete data.category; // "" is not a valid enum value
+
+    const newListing = new Listing(data);
     newListing.owner = req.user._id;
 
     if (req.file) {
         newListing.image = { url: req.file.path, filename: req.file.filename };
     }
 
-    await newListing.save();
+    const geometry = await safeGeocode(data.location, data.country);
+    if (geometry) newListing.geometry = geometry;
+
+    try {
+        await newListing.save();
+    } catch (err) {
+        if (req.file) await removeCloudImage(req.file.filename); // don't orphan the upload
+        throw err;
+    }
+
     req.flash("success", "New Listing Created!");
     res.redirect("/listings");
 };
@@ -77,16 +113,33 @@ module.exports.renderEditForm = async(req, res) => {
     const currentUrl = listing.image && listing.image.url ? listing.image.url : "";
     const originalImageUrl = currentUrl.replace("/upload/", "/upload/w_250/");
 
-    res.render("listings/edit.ejs", { listing, originalImageUrl });
+    res.render("listings/edit.ejs", { listing, originalImageUrl, categories: CATEGORIES });
 };
 
 module.exports.updateListing = async(req, res) => {
     const { id } = req.params;
-    const listing = await Listing.findByIdAndUpdate(
-        id, {...req.body.listing }, { new: true, runValidators: true }
-    );
+    const data = {...req.body.listing };
+    delete data.image;
+
+    const update = {...data };
+    if (!data.category) {
+        delete update.category;
+        update.$unset = { category: 1 }; // cleared in the form -> remove it
+    }
+
+    const geometry = await safeGeocode(data.location, data.country);
+    if (geometry) update.geometry = geometry;
+
+    let listing;
+    try {
+        listing = await Listing.findByIdAndUpdate(id, update, { new: true, runValidators: true });
+    } catch (err) {
+        if (req.file) await removeCloudImage(req.file.filename);
+        throw err;
+    }
 
     if (!listing) {
+        if (req.file) await removeCloudImage(req.file.filename);
         req.flash("error", "Listing you requested for does not exist!");
         return res.redirect("/listings");
     }
