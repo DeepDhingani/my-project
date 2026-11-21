@@ -1,0 +1,52 @@
+<%# Map partial for listings/show.ejs. Needs: listing, mapToken (both passed by the controller). %>
+    <% const coords = listing.geometry && listing.geometry.coordinates; %>
+        <% if (mapToken && coords && coords.length === 2) { %>
+            <div class="col-8 offset-3 mb-3">
+                <h3>Where you'll be</h3>
+                <div id="map" style="height: 400px; width: 100%; border-radius: 1rem;"></div>
+            </div>
+
+            <link href="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.css" rel="stylesheet">
+            <script src="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.js"></script>
+            <%# JSON in a non-executing script tag; "<" is escaped so listing text can't break out of it %>
+                <script id="map-data" type="application/json">
+                    <%- JSON.stringify({
+        token: mapToken,
+        coordinates: coords,
+        title: listing.title,
+        location: listing.location,
+        country: listing.country
+    }).replace(/</g, "\\u003c") %>
+                </script>
+                <script>
+                    (function() {
+                        const data = JSON.parse(document.getElementById("map-data").textContent);
+                        mapboxgl.accessToken = data.token;
+
+                        const map = new mapboxgl.Map({
+                            container: "map",
+                            style: "mapbox://styles/mapbox/streets-v12",
+                            center: data.coordinates, // [lng, lat]
+                            zoom: 9
+                        });
+                        map.addControl(new mapboxgl.NavigationControl());
+
+                        // Build the popup with DOM nodes (textContent) so user text is never parsed as HTML
+                        const popupEl = document.createElement("div");
+                        const h = document.createElement("h6");
+                        h.textContent = data.title;
+                        const p = document.createElement("p");
+                        p.textContent = "Exact location provided after booking";
+                        popupEl.append(h, p);
+
+                        new mapboxgl.Marker({
+                                color: "#fe424d"
+                            })
+                            .setLngLat(data.coordinates)
+                            .setPopup(new mapboxgl.Popup({
+                                offset: 25
+                            }).setDOMContent(popupEl))
+                            .addTo(map);
+                    })();
+                </script>
+                <% } %>

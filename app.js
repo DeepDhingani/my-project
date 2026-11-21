@@ -1,7 +1,7 @@
 if (process.env.NODE_ENV != "production") {
     require('dotenv').config()
 }
-
+require("dns").setServers(["8.8.8.8", "1.1.1.1"]);
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -32,8 +32,15 @@ main()
     .catch((err) => console.log(err));
 
 async function main() {
-    await mongoose.connect("mongodb://127.0.0.1:27017/Wanderlust");
+    await mongoose.connect(process.env.ATLAS_URL || "mongodb://127.0.0.1:27017/Wanderlust");
+    console.log("connected to DB");
+    app.listen(8080, () => console.log("server is listening to port 8080"));
 }
+
+main().catch((err) => {
+    console.log("Could not connect to MongoDB:", err.message);
+    process.exit(1);
+});
 
 const sessionOptions = {
     secret: "mysupersecretcode",
@@ -61,9 +68,9 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get("/", (req, res) => {
-    res.send("Hii I am root");
-});
+// app.get("/", (req, res) => {
+//     res.send("Hii I am root");
+// });
 
 // temporary: visit once, then delete
 // app.get("/demouser", async(req, res) => {

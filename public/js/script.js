@@ -18,3 +18,23 @@
             }, false)
         })
 })()
+
+const taxSwitch = document.getElementById("taxSwitch");
+
+if (taxSwitch) {
+    const GST = 0.18;
+
+    taxSwitch.addEventListener("change", () => {
+        document.querySelectorAll(".price").forEach((el) => {
+            const base = Number(el.dataset.price);
+            if (!base) return; // skip listings with no price
+
+            const amount = taxSwitch.checked ? Math.round(base * (1 + GST)) : base;
+            el.innerHTML = "&#8377; " + amount.toLocaleString("en-IN");
+        });
+
+        document.querySelectorAll(".tax-info").forEach((el) => {
+            el.style.display = taxSwitch.checked ? "inline" : "none";
+        });
+    });
+}

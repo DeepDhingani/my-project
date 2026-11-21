@@ -1,25 +1,47 @@
+// Run from the project root:  node init/index.js
+require("dotenv").config({ path: require("path").join(__dirname, "..", ".env") });
+require("dns").setServers(["8.8.8.8", "1.1.1.1"]);
 const mongoose = require("mongoose");
 const initData = require("./data.js");
 const Listing = require("../Models/listing.js");
+const User = require("../Models/user.js");
 
-const OWNER_ID = "PASTE_A_REAL_USER_ID_HERE"; // 24 hex characters, no spaces
+const MONGO_URL = process.env.ATLAS_URL || "mongodb://127.0.0.1:27017/Wanderlust"; // same DB as app.js
 
-async function main() {
-    await mongoose.connect("mongodb://127.0.0.1:27017/Wanderlust");
-    console.log("connected to DB");
+async function getSeedUser() {
+    // Reuse an existing user if there is one, otherwise create a demo user
+    let user = await User.findOne({});
+    if (!user) {
+        user = await User.register(
+            new User({ email: "demo@example.com", username: "demo-user" }),
+            "demo1234"
+        );
+        console.log("created demo user: demo-user / demo1234");
+    }
+    return user;
 }
 
-const initDb = async() => {
-    if (!mongoose.isValidObjectId(OWNER_ID)) {
-        throw new Error("OWNER_ID is not a valid ObjectId: " + OWNER_ID);
-    }
-    await Listing.deleteMany({});
-    const listings = initData.data.map((obj) => ({...obj, owner: OWNER_ID }));
-    await Listing.insertMany(listings);
-    console.log("Data was initialized");
-};
+async function initDB() {
+    await mongoose.connect(MONGO_URL);
+    console.log("connected to DB");
 
-main()
-    .then(initDb)
-    .catch((err) => console.log(err))
+    const owner = await getSeedUser();
+
+    const listings = initData.data.map((obj) => ({
+        ...obj,
+        // convert string image -> { url, filename } to match the schema
+        image: {
+            url: typeof obj.image === "string" ? obj.image : obj.image.url,
+            filename: "listingimage",
+        },
+        owner: owner._id,
+    }));
+
+    await Listing.deleteMany({});
+    await Listing.insertMany(listings);
+    console.log(`data was initialized (${listings.length} listings)`);
+}
+
+initDB()
+    .catch((err) => console.log("INIT ERROR:", err))
     .finally(() => mongoose.connection.close());

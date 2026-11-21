@@ -1,8 +1,9 @@
-<nav class="navbar navbar-expand-md navbar-dark sticky-top" style="background-color: #263d36;">
+<nav class="navbar navbar-expand-md sticky-top app-navbar">
     <div class="container-fluid">
         <!-- Logo -->
-        <a class="navbar-brand" href="/listings">
-            <i class="fa-solid fa-compass fa-lg" style="color: #fe424d;"></i>
+        <a class="navbar-brand brand" href="/listings">
+            <i class="fa-solid fa-compass"></i>
+            <span class="d-none d-lg-inline ms-2">wanderlust</span>
         </a>
 
         <!-- Mobile toggle -->
@@ -11,23 +12,27 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-            <!-- Left side links -->
-            <div class="navbar-nav">
-                <a class="nav-link" href="/">Home</a>
-                <a class="nav-link" href="/listings">All Listings</a>
-                <a class="nav-link" href="/listings/new">Add new Listings</a>
-            </div>
+            <!-- Centre: search -->
+            <form class="search-form mx-md-auto my-3 my-md-0" role="search" action="/listings" method="get">
+                <input class="search-input" type="search" name="search" placeholder="Search destinations" aria-label="Search destinations" value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>">
+                <button class="search-btn" type="submit" aria-label="Search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
 
-            <!-- Right side: auth -->
-            <div class="navbar-nav ms-auto align-items-md-center">
+            <!-- Right: links + auth -->
+            <div class="navbar-nav align-items-md-center">
+                <a class="nav-link" href="/listings">All Listings</a>
+                <a class="nav-link" href="/listings/new">Add new Listing</a>
+
                 <% if (!currentUser) { %>
-                    <a class="nav-link" href="/signup"><b>Sign up</b></a>
-                    <a class="nav-link" href="/login"><b>Log in</b></a>
+                    <a class="nav-link" href="/login">Log in</a>
+                    <a class="btn btn-brand ms-md-2 my-2 my-md-0" href="/signup">Sign up</a>
                     <% } else { %>
-                        <span class="navbar-text text-white me-md-3">
-                        <i class="fa-solid fa-user"></i> <%= currentUser.username %>
+                        <span class="navbar-text text-dark mx-md-2">
+                        <i class="fa-solid fa-user" style="color: var(--brand);"></i> <%= currentUser.username %>
                     </span>
-                        <a class="nav-link" href="/logout"><b>Log out</b></a>
+                        <a class="nav-link" href="/logout">Log out</a>
                         <% } %>
             </div>
         </div>
