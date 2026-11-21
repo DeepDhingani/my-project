@@ -21,7 +21,7 @@
 
                 <div class="mb-3">
                     <label for="image" class="form-label">Image URL</label>
-                    <input type="text" class="form-control" id="image" name="listing[image]" value="<%= listing.image %>" placeholder="Enter image url" required>
+                    <input type="file" class="form-control" name="listing[image]" accept="image/png, image/jpeg, image/webp">
                     <div class="valid-feedback">Image URL looks good!</div>
                     <div class="invalid-feedback">Please enter a valid image URL.</div>
                 </div>
