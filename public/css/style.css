@@ -1,262 +1,339 @@
- body {
-     font-family: "Plus Jakarta Sans", sans-serif !important;
-     display: flex;
-     flex-direction: column;
-     min-height: 100vh;
- }
- 
- .container {
-     flex: 1
- }
- /* Navbar */
- 
- .custom-navbar {
-     background-color: #263D35 ! important;
- }
- 
- .custom-navbar .navbar-brand,
- .custom-navbar .nav-link {
-     color: white !important;
- }
- 
- .navbar {
-     height: 5rem
- }
- 
- .fa-compass {
-     color: #fe424d;
-     font-size: 2rem;
- }
- /* Footer */
- /* Footer */
- 
- .f-info-socials a {
-     color: inherit;
-     margin: 0 0.6rem;
-     transition: color 0.2s;
- }
- 
- .f-info-socials i {
-     font-size: 1.6rem;
- }
- 
- .f-info-socials a:hover {
-     color: #fe424d;
-     /* same red as your compass */
- }
- 
- .f-info-links a {
-     color: inherit;
-     text-decoration: none;
-     margin: 0 0.75rem;
- }
- 
- .f-info-links a:hover {
-     text-decoration: underline;
- }
- /* Cards */
- 
- .card {
-     /* border: none !important; */
-     margin-bottom: 2rem;
- }
- 
- .card-img-top {
-     border-radius: 1rem !important;
-     width: 100% !important;
-     object-fit: cover !important;
- }
- 
- .card-body {
-     padding: 0 !important;
- }
- 
- .card-text {
-     font-weight: 500 !important;
- }
- /* Card Effect */
- 
- .card-img-overlay {
-     opacity: 0
- }
- 
- .card-img-overlay:hover {
-     opacity: 0.2;
-     background-color: white;
- }
- 
- #filters {
-     display: flex;
-     gap: 2rem;
-     overflow-x: auto;
-     /* scrolls sideways on small screens */
-     padding: 1.2rem 0.5rem;
-     margin-bottom: 1rem;
-     scrollbar-width: none;
- }
- 
- #filters::-webkit-scrollbar {
-     display: none;
- }
- 
- .filter {
-     flex: 0 0 auto;
-     text-align: center;
-     text-decoration: none;
-     color: #222;
-     opacity: 0.7;
-     padding-bottom: 0.4rem;
-     border-bottom: 2px solid transparent;
- }
- 
- .filter:hover,
- .filter.active {
-     opacity: 1;
-     border-bottom-color: #222;
- }
- 
- .filter p {
-     margin: 0;
-     font-size: 0.8rem;
- }
- 
- .filter i {
-     font-size: 1.1rem;
-     margin-bottom: 0.3rem;
- }
- 
- #filters-bar {
-     display: flex;
-     align-items: center;
-     justify-content: space-between;
-     gap: 1.5rem;
- }
- 
- #filters {
-     flex: 1 1 auto;
-     min-width: 0;
-     /* lets the filter row scroll instead of pushing the toggle off-screen */
- }
- 
- .tax-toggle {
-     flex: 0 0 auto;
-     border: 1px solid #ebebeb;
-     border-radius: 1rem;
-     padding: 0.6rem 1rem;
-     white-space: nowrap;
- }
- 
- .tax-toggle .form-check-label {
-     font-size: 0.85rem;
-     margin-right: 0.5rem;
- }
- 
- .tax-info {
-     display: none;
-     font-size: 0.8rem;
-     color: #717171;
- }
- /* On phones, drop the toggle under the filters */
- 
- @media (max-width: 767px) {
-     #filters-bar {
-         flex-direction: column;
-         align-items: stretch;
-         gap: 0.5rem;
-     }
- }
- 
- :root {
-     --brand: #fe424d;
-     --brand-dark: #e0313c;
- }
- /* ---------- Navbar ---------- */
- 
- .app-navbar {
-     background-color: #fff;
-     border-bottom: 1px solid #ebebeb;
-     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
- }
- 
- .app-navbar .brand {
-     color: var(--brand);
-     font-weight: 700;
-     font-size: 1.4rem;
- }
- 
- .app-navbar .brand:hover {
-     color: var(--brand-dark);
- }
- 
- .app-navbar .nav-link {
-     color: #222;
-     font-weight: 500;
- }
- 
- .app-navbar .nav-link:hover {
-     color: var(--brand);
- }
- 
- .btn-brand {
-     background-color: var(--brand);
-     color: #fff;
-     border-radius: 2rem;
-     padding: 0.4rem 1.1rem;
-     font-weight: 600;
-     border: none;
- }
- 
- .btn-brand:hover {
-     background-color: var(--brand-dark);
-     color: #fff;
- }
- /* ---------- Search bar ---------- */
- 
- .search-form {
-     display: flex;
-     align-items: center;
-     width: 100%;
-     max-width: 420px;
-     border: 1px solid #ddd;
-     border-radius: 40px;
-     padding: 0.25rem 0.25rem 0.25rem 1.2rem;
-     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-     background: #fff;
-     transition: border-color 0.2s, box-shadow 0.2s;
- }
- 
- .search-form:focus-within {
-     border-color: var(--brand);
-     box-shadow: 0 0 0 3px rgba(254, 66, 77, 0.2);
- }
- 
- .search-input {
-     flex: 1;
-     min-width: 0;
-     border: none;
-     outline: none;
-     background: transparent;
-     font-size: 0.95rem;
- }
- 
- .search-input::placeholder {
-     color: #888;
- }
- 
- .search-btn {
-     flex: 0 0 auto;
-     width: 2.3rem;
-     height: 2.3rem;
-     border: none;
-     border-radius: 50%;
-     background-color: var(--brand);
-     color: #fff;
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     cursor: pointer;
- }
- 
- .search-btn:hover {
-     background-color: var(--brand-dark);
- }
+:root {
+    --brand: #fe424d;
+    --brand-dark: #e0313c;
+}
+
+body {
+    font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    overflow-x: hidden;
+    /* stops accidental sideways scrolling on phones */
+}
+
+img {
+    max-width: 100%;
+}
+
+
+/* ---------- Navbar ---------- */
+
+.app-navbar {
+    background-color: #fff;
+    border-bottom: 1px solid #ebebeb;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+}
+
+.app-navbar .brand {
+    color: var(--brand);
+    font-weight: 700;
+    font-size: 1.4rem;
+}
+
+.app-navbar .brand:hover {
+    color: var(--brand-dark);
+}
+
+.app-navbar .nav-link {
+    color: #222;
+    font-weight: 500;
+}
+
+.app-navbar .nav-link:hover {
+    color: var(--brand);
+}
+
+.btn-brand {
+    background-color: var(--brand);
+    color: #fff;
+    border-radius: 2rem;
+    padding: 0.4rem 1.1rem;
+    font-weight: 600;
+    border: none;
+}
+
+.btn-brand:hover {
+    background-color: var(--brand-dark);
+    color: #fff;
+}
+
+
+/* ---------- Search bar (always visible, outside the hamburger) ---------- */
+
+.search-form {
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+    /* fills the space between the logo and the hamburger on phones */
+    min-width: 0;
+    margin: 0 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 40px;
+    padding: 0.2rem 0.2rem 0.2rem 1rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    background: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-form:focus-within {
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px rgba(254, 66, 77, 0.2);
+}
+
+.search-input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.95rem;
+}
+
+.search-input::placeholder {
+    color: #888;
+}
+
+.search-btn {
+    flex: 0 0 auto;
+    width: 2.1rem;
+    height: 2.1rem;
+    border: none;
+    border-radius: 50%;
+    background-color: var(--brand);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.search-btn:hover {
+    background-color: var(--brand-dark);
+}
+
+
+/* Desktop: centre the search between the logo and the links */
+
+@media (min-width: 768px) {
+    .search-form {
+        flex: 0 1 420px;
+        margin: 0 auto;
+        padding-left: 1.2rem;
+    }
+    .search-btn {
+        width: 2.3rem;
+        height: 2.3rem;
+    }
+    .app-navbar .navbar-collapse {
+        flex-grow: 0;
+    }
+    /* links hug the right side */
+}
+
+
+/* ---------- Filters + tax toggle ---------- */
+
+#filters-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+#filters {
+    flex: 1 1 auto;
+    min-width: 0;
+    /* lets the filter row scroll instead of pushing the toggle off-screen */
+    display: flex;
+    gap: 2rem;
+    overflow-x: auto;
+    padding: 1.2rem 0.5rem;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+#filters::-webkit-scrollbar {
+    display: none;
+}
+
+.filter {
+    flex: 0 0 auto;
+    text-align: center;
+    text-decoration: none;
+    color: #222;
+    opacity: 0.7;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid transparent;
+}
+
+.filter:hover,
+.filter.active {
+    opacity: 1;
+    border-bottom-color: var(--brand);
+    color: var(--brand);
+}
+
+.filter p {
+    margin: 0;
+    font-size: 0.8rem;
+}
+
+.filter i {
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+}
+
+.tax-toggle {
+    flex: 0 0 auto;
+    border: 1px solid #ebebeb;
+    border-radius: 1rem;
+    padding: 0.6rem 1rem;
+    white-space: nowrap;
+}
+
+.tax-toggle .form-check-label {
+    font-size: 0.85rem;
+    margin-right: 0.5rem;
+}
+
+.form-check-input:checked {
+    background-color: var(--brand);
+    border-color: var(--brand);
+}
+
+.tax-info {
+    display: none;
+    font-size: 0.8rem;
+    color: #717171;
+}
+
+
+/* ---------- Listing cards ---------- */
+
+.listing-card .card-img-top,
+.listing-img {
+    border-radius: 1rem;
+    height: 20rem;
+    object-fit: cover;
+    width: 100%;
+}
+
+.listing-card:hover .listing-img {
+    opacity: 0.9;
+}
+
+
+/* ---------- Show page ---------- */
+
+.show-img {
+    height: 24rem;
+    object-fit: cover;
+    width: 100%;
+}
+
+
+/* ---------- Footer ---------- */
+
+.site-footer {
+    margin-top: 3rem;
+    padding: 1.5rem 0;
+    background-color: #f8f9fa;
+    border-top: 1px solid #ebebeb;
+    text-align: center;
+}
+
+.site-footer .social {
+    font-size: 1.6rem;
+    display: flex;
+    justify-content: center;
+    gap: 1.2rem;
+    margin-bottom: 0.8rem;
+}
+
+.site-footer .links a {
+    margin: 0 0.6rem;
+    color: #222;
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   TABLETS AND PHONES (under 768px)
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+    h3 {
+        font-size: 1.3rem;
+    }
+    h4 {
+        font-size: 1.15rem;
+    }
+    /* navbar: logo, search and hamburger stay on one row; the menu opens below */
+    .app-navbar .navbar-brand {
+        margin-right: 0;
+    }
+    .app-navbar .navbar-collapse {
+        flex-basis: 100%;
+        padding-bottom: 0.75rem;
+    }
+    .app-navbar .nav-link {
+        padding: 0.65rem 0;
+    }
+    /* filters on top, tax toggle underneath */
+    #filters-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.25rem;
+        margin-top: 0.5rem;
+    }
+    #filters {
+        gap: 1.4rem;
+        padding: 0.8rem 0.25rem;
+    }
+    .tax-toggle {
+        white-space: normal;
+        padding: 0.5rem 0.9rem;
+        border-radius: 0.75rem;
+    }
+    .tax-toggle .form-check {
+        margin-bottom: 0;
+    }
+    /* shorter images so a card doesn't fill the whole screen */
+    .listing-card .card-img-top,
+    .listing-img {
+        height: 15rem;
+    }
+    .show-img {
+        height: 16rem;
+    }
+    /* inputs at 16px stop iOS from zooming the page when you tap them */
+    input,
+    select,
+    textarea,
+    .form-control,
+    .form-select {
+        font-size: 16px !important;
+    }
+    /* easier to tap */
+    .btn {
+        min-height: 44px;
+    }
+    .btn-sm {
+        min-height: 38px;
+    }
+    .site-footer {
+        margin-top: 2rem;
+    }
+}
+
+
+/* very small phones */
+
+@media (max-width: 400px) {
+    .listing-card .card-img-top,
+    .listing-img {
+        height: 13rem;
+    }
+    #filters {
+        gap: 1.1rem;
+    }
+}

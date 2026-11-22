@@ -1,7 +1,7 @@
 <%# Map partial for listings/show.ejs. Needs: listing, mapToken (both passed by the controller). %>
     <% const coords = listing.geometry && listing.geometry.coordinates; %>
         <% if (mapToken && coords && coords.length === 2) { %>
-            <div class="col-12 col-md-8 offset-md-2 mt-4 mb-3">
+            <div class="col-12 col-md-8 offset-md-2 mb-3 mt-4">
                 <h3>Where you'll be</h3>
                 <div id="map" style="height: 400px; width: 100%; border-radius: 1rem;"></div>
             </div>
